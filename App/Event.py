@@ -253,7 +253,6 @@ class GroupChat(object):
             _deal = f"Api Outline \n {prompt}"
         # 限额
         Usage.renewUsage(user=user, father=_Usage, usage=_usage)
-        _deal = ContentDfa.filter_all(_deal)
         # 人性化处理
         _deal = Utils.Humanization(_deal)
         return _deal
@@ -470,19 +469,6 @@ async def Master(bot, message, config):
                 _key = "whiteUser"
                 _info = Utils.removeList(_key, command)
                 await bot.reply_to(message, _info)
-
-            # UPDATE
-            if command == "/update_detect":
-                keys, _error = InitCensor()
-                if _error:
-                    error = '\n'.join(_error)
-                    errors = f"Error:\n{error}"
-                else:
-                    # 重载 Danger 库
-                    ContentDfa.change_words(path="./Data/Danger.form")
-                    errors = "Success"
-                if message:
-                    await bot.reply_to(message, f"{'|'.join(keys)}\n\n{errors}")
 
             # USER White
             if command == "/open_user_white_mode":
