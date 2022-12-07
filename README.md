@@ -28,7 +28,6 @@ This is not an official OpenAI product. This is a personal project and is not af
 * 支持速率限制
 * 支持白名单系统
 * 支持黑名单系统
-* 支持内容过滤
 * (20221205) 依赖库不支持异步，大量请求会阻塞,替换为自己写的异步库
 * chatGpt 替换为自己写的 chatGpt Openai api Python 实现
 
@@ -66,14 +65,6 @@ pip install -r requirements.txt
 ```
 
 `pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple`
-
-### 过滤器
-
-Data/Danger.form 一行一个黑名单词汇。至少要有一个。
-
-如果没有，程序会自动下拉云端默认名单，后续的 updetect 也会拉云端覆盖本地。
-
-你可以通过放置一个一行的名单来关闭这个过滤器，但是我不赞成你这样做。
 
 ### 配置 Config/app.toml
 
