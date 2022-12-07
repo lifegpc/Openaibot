@@ -11,7 +11,6 @@ from typing import Union
 # from App.chatGPT import PrivateChat
 from utils.Base import ReadConfig
 from utils.Data import DataWorker, DictUpdate, DefaultData
-from utils.Detect import DFA, Censor
 from utils.Data import ExpiringDict
 from utils.Base import Logger
 from datetime import datetime, timedelta
@@ -20,29 +19,7 @@ logger = Logger()
 
 # 工具数据类型
 DataUtils = DataWorker(prefix="Open_Ai_bot_")
-urlForm = {
-    "Danger.form": [
-        "https://raw.githubusercontent.com/fwwdn/sensitive-stop-words/master/%E6%94%BF%E6%B2%BB%E7%B1%BB.txt",
-        "https://raw.githubusercontent.com/TelechaBot/AntiSpam/main/Danger.txt"
-    ]
-}
 
-
-def InitCensor():
-    config = ReadConfig().parseFile(str(pathlib.Path.cwd()) + "/Config/app.toml")
-    if config.proxy.status:
-        proxies = {
-            'all://': config.proxy.url,
-        }  # 'http://127.0.0.1:7890'  # url
-        return Censor.InitWords(url=urlForm, home_dir="./Data/", proxy=proxies)
-    else:
-        return Censor.InitWords(url=urlForm, home_dir="./Data/")
-
-
-if not pathlib.Path("./Data/Danger.form").exists():
-    InitCensor()
-# 过滤器
-ContentDfa = DFA(path="./Data/Danger.form")
 
 global _csonfig
 global Group_Msg
@@ -229,10 +206,6 @@ class GroupChat(object):
         # 长度限定
         if _csonfig["input_limit"] < len(str(prompt)) / 4:
             return "TOO LONG"
-
-        # 内容审计
-        if ContentDfa.exists(str(prompt)):
-            return "I am a robot and not fit to answer dangerous content."
 
         # 洪水防御攻击
         if Utils.WaitFlood(user=user, group=group, usercold_time=userlimit):
